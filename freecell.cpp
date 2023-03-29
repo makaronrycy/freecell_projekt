@@ -34,10 +34,11 @@ class PlayingCards{
 };
 int main(){
     PlayingCards *cards = new PlayingCards;
-    std::thread t1(&PlayingCards::shuffleCards,cards);
+    
     for(auto i : cards->deck){
         std::cout<<i<<'\n';
     }
+    std::thread t1(&PlayingCards::shuffleCards,cards);
     t1.join();
     std::cout<<'\n';
     for(auto i : cards->deck){
