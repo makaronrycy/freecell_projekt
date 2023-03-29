@@ -1,2 +1,2 @@
-# Prerequisites
-.vscode
+.vscode/*
+!.vscode/settings.json
