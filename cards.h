@@ -73,9 +73,13 @@ class FreeCell: public PlayingCards{
         }
         void drawBoard(){
             //WIP
+            int cards_accounted = 0;
             for(auto i: area_free){
                 if(i.number == 0) cout<<"_ "<<'\t';
-                else cout<<i.type<<i.number<<'\t';
+                else {
+                    cout<<i.type<<i.number<<'\t';
+                    cards_accounted++;
+                }
             }
             cout<<std::setw(12);
             for(auto i: area_win){
@@ -84,7 +88,6 @@ class FreeCell: public PlayingCards{
             }
             cout<<'\n'<<'\n';
             int play_index = 0;
-            int cards_accounted = 0;
             while (cards_accounted < 52){
                 cout<<std::setw(12);
                 for (size_t i = 0; i < PLAY_AREA_SIZE; i++){
@@ -100,19 +103,30 @@ class FreeCell: public PlayingCards{
                 cout<<'\n';
             }
         }
-        bool moveCard(int from, int to){
+        bool moveCard(int from, int to, char area[]){
             // sprawdzanie czy wywołanie ruchu jest poprawne
             if(from < 0 || from >7 || to < 0 || to > 7) return false;
+            if(area[0] != 'g' && area[0] != 'p' && area[0] != 'd') return false;
+            if(area[1] != 'g' && area[1] != 'p' && area[1] != 'd') return false;
             if(area_play[from].empty()) return false;
             
-            Card cardValue_from = area_play[from].back();
-            Card cardValue_to = area_play[to].back();
-            // sprawdzanie czy ruch jest legalny
-            if(cardValue_to.number - cardValue_from.number != 1) return false;
-            if(cardValue_from.if_red == cardValue_to.if_red) return false;
+            if(area[0] == 'g' && area[1] == 'g'){
+                Card cardValue_from = area_play[from].back();
+                Card cardValue_to = area_play[to].back();
+                if(cardValue_to.number - cardValue_from.number != 1) return false;     // sprawdzanie czy ruch jest legalny
+                if(cardValue_from.if_red == cardValue_to.if_red) return false;
+                area_play[to].push_back(area_play[from].back());
+                area_play[from].pop_back();
+            }
 
-            area_play[to].push_back(area_play[from].back());
-            area_play[from].pop_back();
+            if(area[0] == 'g' && area[1] == 'p'){
+                Card cardValue_from = area_play[from].back();
+                area_play[from].pop_back();
+                area_free->number = cardValue_from.number;
+                area_free->type = cardValue_from.type;
+                area_free->if_red = cardValue_from.if_red;
+            }
+
             return true;
             }
 };
