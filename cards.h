@@ -12,19 +12,33 @@ k - karo    11 - jopek
 p - pik     12 - dama
             13 - król
 */
+
+
  const int DECK_SIZE = 52;
  const int PLAY_AREA_SIZE = 8;
  const int GENERAL_AREA_SIZE = 4;
 
+struct Card{
+    int number;
+    char type;
+    bool if_red;
+    Card(int number, char type){
+        this->number = number;
+        this->type = type;
+        if(type == 's' || type == 'k') this->if_red = true;
+        else this->if_red = false;
+    }
+};
 class PlayingCards{
     public:
-        vector<string> deck;
+        vector<Card> deck;
         PlayingCards(){
-            for (auto c : {'s','t','k','p'})
+            for (auto type : {'s','t','k','p'})
             {
-                for (int i = 1; i <= 13; i++)
-                {
-                    deck.push_back(c + std::to_string(i));
+                for (int number = 1; number <= 13; number++)
+                {   
+                    Card new_card(number,type);
+                    deck.push_back(new_card);
                 }
             }
         }
@@ -38,7 +52,7 @@ class PlayingCards{
 class FreeCell: public PlayingCards{
     using PlayingCards::PlayingCards;
     private:
-        vector<string> area_play[PLAY_AREA_SIZE];
+        vector<Card> area_play[PLAY_AREA_SIZE];
         string area_win[GENERAL_AREA_SIZE];
         string area_free[GENERAL_AREA_SIZE];
         bool if_win;
@@ -76,53 +90,27 @@ class FreeCell: public PlayingCards{
                         continue;
                     }
                     cards_accounted++;
-                    cout<<area_play[i][play_index]<<'\t'; 
+                    cout<<area_play[i][play_index].type<<area_play[i][play_index].number<<'\t'; 
                 }
                 play_index++;
                 cout<<'\n';
             }
         }
-        void moveCard(int from, int to){
-            if (area_play[from].empty())
-            {
-                return;
-            }
+        bool moveCard(int from, int to){
+            // sprawdzanie czy wywołanie ruchu jest poprawne
+            if(from < 0 || from >7 || to < 0 || to > 7) return false;
+            if(area_play[from].empty()) return false;
+            
+            Card cardValue_from = area_play[from].back();
+            Card cardValue_to = area_play[to].back();
+            // sprawdzanie czy ruch jest legalny
+            if(cardValue_from.number - cardValue_to.number != 1) return false;
+            if(cardValue_from.if_red == cardValue_to.if_red) return false;
 
-            string cardValue_from, cardValue_to;                           
-            cardValue_from = area_play[from].back();
-            cardValue_to = area_play[to].back();
-            
-            char colour[2];
-            int number_from,number_to;
-
-            if(cardValue_from[0] == 's' || cardValue_from[0] == 'k'){
-                colour[0] = 'r';
-            } 
-            else colour[0] = 'b';
-            
-            if(cardValue_to[0] == 's' || cardValue_to[0] == 'k'){
-                colour[1] = 'r';
-            } 
-            else colour[1] = 'b';
-            
-            
-            if (cardValue_from[2] != 0){
-                number_from = 10*cardValue_from[1] + cardValue_from[2];
+            area_play[to].push_back(area_play[from].back());
+            area_play[from].pop_back();
             }
-            else   number_from = cardValue_from[1];
-            
-            if (cardValue_to[2] != 0){
-                number_to = 10*cardValue_to[1] + cardValue_to[2];
-            }
-            else   number_to = cardValue_to[1];
-
-
-            if ((colour[0] != colour[1]) && (number_to - number_from == 1)){             // SPRAWDZANIE CZY MOŻNA POSTAWIĆ KARTĘ;
-                area_play[to].push_back(area_play[from].back());
-                area_play[from].pop_back();
-            }
-            else 
-                cout << "Niepoprawny ruch";
-        }
+           
+        
 
 };

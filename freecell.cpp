@@ -14,12 +14,10 @@ int main(){
         cin >> from;
         cout << "Kolumna docelowa przeniesionej karty: ";
         cin >> to;
-        if ((from <=8 && from >=1) && (to <=8 && to >=1)){
-        cards.moveCard(from - 1,to - 1);
+        if(!cards.moveCard(from - 1,to - 1)){
+            cout << "niepoprawny ruch";
         }
-    else
-        cout << "niepoprawny ruch";
-    cards.drawBoard(); 
+        cards.drawBoard(); 
     }
 }
 
