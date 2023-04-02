@@ -3,6 +3,7 @@
 */
 
 #include "header.h"
+using namespace std; // sory ale tak mi latwiej
 /*
 KODOWANIE KART:
 s - serce   1 - As  
@@ -45,12 +46,8 @@ class FreeCell: public PlayingCards{
         
         void newGame(){
                 if_win = false;
-                /*thread t1(FreeCell::shuffleCards,this);
-                t1.join();*/
-                // for (int i = 0; i < PLAY_AREA_SIZE; i++)
-                // {
-                //     area_play[i].reserve(sizeof(string)*20);
-                // }
+                thread t1(FreeCell::shuffleCards,this);
+                t1.join();
                 for(int i = 0; i < DECK_SIZE; i++){
                     int play_column = i % PLAY_AREA_SIZE;
                     auto play_end = area_play[play_column].end();
@@ -90,11 +87,42 @@ class FreeCell: public PlayingCards{
             {
                 return;
             }
-            /*SPRAWDZANIE CZY MOŻNA POSTAWIĆ KARTĘ;
 
-            */
-            area_play[to].push_back(area_play[from].back());
-            area_play[from].pop_back();
+            string cardValue_from, cardValue_to;                           
+            cardValue_from = area_play[from].back();
+            cardValue_to = area_play[to].back();
+            
+            char colour[2];
+            int number_from,number_to;
+
+            if(cardValue_from[0] == 's' || cardValue_from[0] == 'k'){
+                colour[0] = 'r';
+            } 
+            else colour[0] = 'b';
+            
+            if(cardValue_to[0] == 's' || cardValue_to[0] == 'k'){
+                colour[1] = 'r';
+            } 
+            else colour[1] = 'b';
+            
+            
+            if (cardValue_from[2] != 0){
+                number_from = 10*cardValue_from[1] + cardValue_from[2];
+            }
+            else   number_from = cardValue_from[1];
+            
+            if (cardValue_to[2] != 0){
+                number_to = 10*cardValue_to[1] + cardValue_to[2];
+            }
+            else   number_to = cardValue_to[1];
+
+
+            if ((colour[0] != colour[1]) && (number_to - number_from == 1)){             // SPRAWDZANIE CZY MOŻNA POSTAWIĆ KARTĘ;
+                area_play[to].push_back(area_play[from].back());
+                area_play[from].pop_back();
+            }
+            else 
+                cout << "Niepoprawny ruch";
         }
 
 };
