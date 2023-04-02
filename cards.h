@@ -19,15 +19,16 @@ p - pik     12 - dama
  const int GENERAL_AREA_SIZE = 4;
 
 struct Card{
-    int number;
-    char type;
-    bool if_red;
-    Card(int number, char type){
-        this->number = number;
-        this->type = type;
-        if(type == 's' || type == 'k') this->if_red = true;
-        else this->if_red = false;
-    }
+    public: 
+        int number;
+        char type;
+        bool if_red;
+        Card(int number = 0, char type = ' '){
+            this->number = number;
+            this->type = type;
+            if(type == 's' || type == 'k') this->if_red = true;
+            else this->if_red = false;
+        }
 };
 class PlayingCards{
     public:
@@ -51,10 +52,12 @@ class PlayingCards{
 
 class FreeCell: public PlayingCards{
     using PlayingCards::PlayingCards;
+    
     private:
+        
         vector<Card> area_play[PLAY_AREA_SIZE];
-        string area_win[GENERAL_AREA_SIZE];
-        string area_free[GENERAL_AREA_SIZE];
+        Card area_win[GENERAL_AREA_SIZE];
+        Card area_free[GENERAL_AREA_SIZE];
         bool if_win;
     public:
         
@@ -69,14 +72,15 @@ class FreeCell: public PlayingCards{
                 }
         }
         void drawBoard(){
+            //WIP
             for(auto i: area_free){
-                if(i == "") cout<<"_ "<<'\t';
-                else cout<<i<<'\t';
+                if(i.number == 0) cout<<"_ "<<'\t';
+                else cout<<i.type<<i.number<<'\t';
             }
             cout<<std::setw(12);
             for(auto i: area_win){
-                if(i == "") cout<<"_ "<<'\t';
-                else cout<<i<<'\t';
+                if(i.number == 0) cout<<"_ "<<'\t';
+                else cout<<i.type<<i.number<<'\t';
             }
             cout<<'\n'<<'\n';
             int play_index = 0;
@@ -104,13 +108,11 @@ class FreeCell: public PlayingCards{
             Card cardValue_from = area_play[from].back();
             Card cardValue_to = area_play[to].back();
             // sprawdzanie czy ruch jest legalny
-            if(cardValue_from.number - cardValue_to.number != 1) return false;
+            if(cardValue_to.number - cardValue_from.number != 1) return false;
             if(cardValue_from.if_red == cardValue_to.if_red) return false;
 
             area_play[to].push_back(area_play[from].back());
             area_play[from].pop_back();
+            return true;
             }
-           
-        
-
 };

@@ -15,7 +15,7 @@ int main(){
         cout << "Kolumna docelowa przeniesionej karty: ";
         cin >> to;
         if(!cards.moveCard(from - 1,to - 1)){
-            cout << "niepoprawny ruch";
+            cout << "niepoprawny ruch"<<'\n';
         }
         cards.drawBoard(); 
     }
