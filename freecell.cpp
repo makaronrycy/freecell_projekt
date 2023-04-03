@@ -7,6 +7,7 @@ int main(){
     cards.newGame();
     cards.drawBoard();
     int from,to;
+    char area[2];
     int win = false;
     while (win == false)
     {
