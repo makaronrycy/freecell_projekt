@@ -58,11 +58,13 @@ class FreeCell: public PlayingCards{
         vector<Card> area_play[PLAY_AREA_SIZE];
         Card area_win[GENERAL_AREA_SIZE];
         Card area_free[GENERAL_AREA_SIZE];
+        int i_free;
         bool if_win;
     public:
         
         void newGame(){
                 if_win = false;
+                i_free = 0;
                 thread t1(FreeCell::shuffleCards,this);
                 t1.join();
                 for(int i = 0; i < DECK_SIZE; i++){
@@ -106,27 +108,40 @@ class FreeCell: public PlayingCards{
         bool moveCard(int from, int to, char area[]){
             // sprawdzanie czy wywołanie ruchu jest poprawne
             if(from < 0 || from >7 || to < 0 || to > 7) return false;
+            if(isdigit(area[0]) || isdigit(area[1]) || isalpha(from) || isalpha(to)) return false;
             if(area[0] != 'g' && area[0] != 'p' && area[0] != 'd') return false;
             if(area[1] != 'g' && area[1] != 'p' && area[1] != 'd') return false;
             if(area_play[from].empty()) return false;
             
+
             if(area[0] == 'g' && area[1] == 'g'){
                 Card cardValue_from = area_play[from].back();
                 Card cardValue_to = area_play[to].back();
+
                 if(cardValue_to.number - cardValue_from.number != 1) return false;     // sprawdzanie czy ruch jest legalny
                 if(cardValue_from.if_red == cardValue_to.if_red) return false;
+
                 area_play[to].push_back(area_play[from].back());
                 area_play[from].pop_back();
             }
 
-            if(area[0] == 'g' && area[1] == 'p'){
+            if(area[0] == 'g' && area[1] == 'p' && i_free <= 3){
                 Card cardValue_from = area_play[from].back();
                 area_play[from].pop_back();
-                area_free->number = cardValue_from.number;
-                area_free->type = cardValue_from.type;
-                area_free->if_red = cardValue_from.if_red;
+                area_free[i_free] = cardValue_from;
+                i_free++;
             }
-
+            if(area[0] == 'p' && area[1] == 'g' && i_free > 0){
+                i_free--;
+                Card cardValue_from = area_free[i_free];
+                Card cardValue_to = area_play[to].back();
+                if(cardValue_to.number - cardValue_from.number != 1 || cardValue_from.if_red == cardValue_to.if_red){
+                    i_free++;
+                    return false;
+                }
+                area_free[i_free] = Card();
+                area_play[to].push_back(cardValue_from);
+            }
             return true;
             }
 };

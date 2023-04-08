@@ -24,6 +24,7 @@ int main(){
         } else to = 1;
         if(!cards.moveCard(from - 1,to - 1, area)){
             cout << "niepoprawny ruch"<<'\n';
+            cin.clear();
         }
         cards.drawBoard(); 
     }
