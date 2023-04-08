@@ -18,7 +18,7 @@ int main(){
         cin >> area[1];
         cout << "Kolumna z ktorej chcesz przeniesc karte: ";
         cin >> from;
-        if (area[1] != 'p'){
+        if (area[1] == 'g' ){
             cout << "Kolumna docelowa przeniesionej karty: ";
             cin >> to;
         } else to = 1;
@@ -26,7 +26,10 @@ int main(){
             cout << "niepoprawny ruch"<<'\n';
             cin.clear();
         }
-        cards.drawBoard(); 
+        cards.drawBoard();
+        if(cards.checkWin()){
+            cout<<"Zwyciestwo!"
+        } 
     }
 }
 
