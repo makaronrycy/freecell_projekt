@@ -38,7 +38,7 @@ class PlayingCards{
         PlayingCards(){
             for (auto type : {'s','t','k','p'})
             {
-                for (int number = 13; number > 0; number--)
+                for (int number = 1; number <= 13; number++)
                 {   
                     Card new_card(number,type);
                     deck.push_back(new_card);
@@ -68,8 +68,8 @@ class FreeCell: public PlayingCards{
                 if_win = false;
                 i_free = 0;
                 cards_in_game = 52;
-                //thread t1(FreeCell::shuffleCards,this);
-                //t1.join();
+                thread t1(FreeCell::shuffleCards,this);
+                t1.join();
                 for(int i = 0; i < DECK_SIZE; i++){
                     int play_column = i % PLAY_AREA_SIZE;
                     auto play_end = area_play[play_column].end();
@@ -77,7 +77,6 @@ class FreeCell: public PlayingCards{
                 }
         }
         void drawBoard(){
-            //WIP
             int cards_accounted = 0;
             for(auto i: area_free){
                 if(i.number == 0) cout<<"_ "<<'\t';
@@ -96,6 +95,7 @@ class FreeCell: public PlayingCards{
             }
             cout<<'\n'<<'\n';
             int play_index = 0;
+            //wykonuje tak długo tyle ile jest kart w grze
             while (cards_accounted < cards_in_game){
                 cout<<std::setw(12);
                 for (size_t i = 0; i < PLAY_AREA_SIZE; i++){
@@ -118,6 +118,7 @@ class FreeCell: public PlayingCards{
             if(isdigit(area[0]) || isdigit(area[1]) || isalpha(from) || isalpha(to)) return false;
             if(area_play[from].empty()) return false;
             
+            //Przygotowanie kart oraz sprawdzanie zakresów w jakich mogą sie ruszać
             for (int i = 0; i < 2; i++)
             {
                 switch (area[i])
@@ -140,6 +141,8 @@ class FreeCell: public PlayingCards{
             }
             Card cardValue_from = selected_cards[0];
             Card cardValue_to = selected_cards[1];
+
+            //ZASADY DLA RUCHÓW
 
             if(area[0] == 'g' && area[1] == 'g'){
                 if(cardValue_to.number - cardValue_from.number != 1) return false;     // sprawdzanie czy ruch jest legalny
@@ -170,7 +173,7 @@ class FreeCell: public PlayingCards{
                     }
                 }
             }
-            //Usuń przesunięte karty
+            //Usuwanie przesuniętych kart
             if(area[0] == 'g') area_play[from].pop_back();
             else if(area[0] == 'p'){
                 area_free[from] = Card();
@@ -179,6 +182,7 @@ class FreeCell: public PlayingCards{
             return true;
             }
         bool checkWin(){
+            //Jeśli zostały tylko 4 karty w grze (każda na polu zwycięskim), to wygrywasz
             if(cards_in_game == 4){
                 return true;
             }else return false;
