@@ -79,15 +79,15 @@ class FreeCell: public PlayingCards{
         void drawBoard(){
             int cards_accounted = 0;
             for(auto i: area_free){
-                if(i.number == 0) cout<<"_ "<<'\t';
+                if(i.number == 0) cout<<" _________ "<<'\t';
                 else {
                     cout<<i.type<<i.number<<'\t';
                     cards_accounted++;
                 }
             }
-            cout<<std::setw(12);
+            cout<<std::setw(20);
             for(auto i: area_win){
-                if(i.number == 0) cout<<"_ "<<'\t';
+                if(i.number == 0) cout<<" _________ "<<'\t';
                 else {
                     cout<<i.type<<i.number<<'\t';
                     cards_accounted++;
@@ -96,20 +96,78 @@ class FreeCell: public PlayingCards{
             cout<<'\n'<<'\n';
             int play_index = 0;
             //wykonuje tak długo tyle ile jest kart w grze
+
+
+            int difference[8] = {};
             while (cards_accounted < cards_in_game){
-                cout<<std::setw(12);
+                // cout<<std::setw(12);
+                
+                for(int i=0; i<8; i++){
+                    if(area_play[i].size() == 0){
+                        difference[i] = 5;
+                    }
+
+                    if(play_index == 0 && area_play[i].size() != 0){
+                        cout<<" _________ "<<'\t';
+                    }   
+                    else if(area_play[i].size() > play_index || difference[i] == 4){
+                        cout<<"|_________|"<<'\t';
+                        
+                        if(difference[i] == 4){
+                            difference[i]++;
+                        }
+                    } 
+                    else if ((area_play[i].size() <= play_index) && (difference[i]<5)){
+                        cout<<"|         |"<<'\t';
+                        difference[i]++;
+                    }
+                    else cout<<std::setw(10)<<'\t';
+                }
+                cout<<'\n';
+
                 for (size_t i = 0; i < PLAY_AREA_SIZE; i++){
                     //sprawdź czy istnieje karta na indeksie,jeśli nie to pomiń
-                    if(area_play[i].size() <= play_index){
-                        cout<<"  "<<'\t';
+                    
+                    if(difference[i] == 4){
+                        cout<<"|_________|"<<'\t';
                         continue;
                     }
+                    else if(difference[i] == 5){
+                        cout<<std::setw(10)<<'\t';
+                        continue;
+                    }
+
+                    if(area_play[i].size() <= play_index){
+                        cout<<"|         |"<<'\t';
+                        difference[i]++;
+                        continue;
+                    } 
                     cards_accounted++;
-                    cout<<area_play[i][play_index].type<<area_play[i][play_index].number<<'\t'; 
+                    cout<<"|"<<area_play[i][play_index].type<<std::setw(8)<<area_play[i][play_index].number<<"|"<<'\t';   
                 }
                 play_index++;
                 cout<<'\n';
             }
+
+            for(int j=0; j<5; j++){
+                for(int i=0; i<8; i++){
+                    if(difference[i] == 4){
+                        cout<<"|_________|"<<'\t';
+                        difference[i]++;
+                        continue;
+                    }
+                    else if(difference[i] == 5){
+                        cout<<std::setw(10)<<'\t';
+                    }
+                    else{
+                         cout<<"|         |"<<'\t';
+                         difference[i]++;
+                    }
+                }
+                cout<<'\n';
+            }
+
+
         }
         bool moveCard(int from, int to, char area[]){
             // sprawdzanie czy wywołanie ruchu jest poprawne

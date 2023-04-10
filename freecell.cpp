@@ -28,7 +28,7 @@ int main(){
         }
         cards.drawBoard();
         if(cards.checkWin()){
-            cout<<"Zwyciestwo!"
+            cout<<"Zwyciestwo!";
         } 
     }
 }
