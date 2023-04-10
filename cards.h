@@ -17,18 +17,22 @@ p - pik     12 - dama
  const int DECK_SIZE = 52;
  const int PLAY_AREA_SIZE = 8;
  const int GENERAL_AREA_SIZE = 4;
-const char DEFAULT_CHAR = ' ';
+const char* DEFAULT_CHAR = nullptr;
 
+const char *hearts  = "\x03";  //♥
+const char *diamond = "\x04";  //♦
+const char *clubs   = "\x05";  //♣
+const char *spades  = "\x06";  //♠
 
 struct Card{
     public: 
-        int number;
-        char type;
-        bool if_red;
-        Card(int number = 0, char type = DEFAULT_CHAR){
+        const int number;
+        const char *type;
+        const bool if_red;
+        Card(int number = 0, const char *type = DEFAULT_CHAR){
             this->number = number;
             this->type = type;
-            if(type == 's' || type == 'k') this->if_red = true;
+            if(type == hearts || type == diamond) this->if_red = true;
             else this->if_red = false;
         }
 };
@@ -36,7 +40,7 @@ class PlayingCards{
     public:
         vector<Card> deck;
         PlayingCards(){
-            for (auto type : {'s','t','k','p'})
+            for (auto type : {hearts,diamond,clubs,spades})
             {
                 for (int number = 1; number <= 13; number++)
                 {   
@@ -102,7 +106,7 @@ class FreeCell: public PlayingCards{
             while (cards_accounted < cards_in_game){
                 // cout<<std::setw(12);
                 
-                for(int i=0; i<8; i++){
+                for(int i=0; i< PLAY_AREA_SIZE; i++){
                     if(area_play[i].size() == 0){
                         difference[i] = 5;
                     }
