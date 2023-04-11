@@ -93,7 +93,7 @@ class FreeCell: public PlayingCards{
         }
         void drawBoard(){
             system("cls");
-             int cards_accounted = 0;
+            int cards_accounted = 0;
             cout <<'\n' << std::setw(37) << "Grupa Pomocnicza" << std::setw(72) << "Grupa Docelowa" << '\n';
             for (int i=0; i<8; i++){
                 cout<<" _________ "<<'\t';
@@ -135,13 +135,14 @@ class FreeCell: public PlayingCards{
             }
             cout<<'\n'<<'\n'<< std::setw(60) << "Pole Gry" << '\n';
             int play_index = 0;
-            //wykonuje tak d˜ugo tyle ile jest kart w grze
+            //wykonuje tak dÅ‚ugo tyle ile jest kart w grze
 
 
             int difference[8] = {};
             while (cards_accounted < cards_in_game){
                 // cout<<std::setw(12);
-                for(int i=0; i< PLAY_AREA_SIZE; i++){
+                
+                for(int i=0; i<8; i++){
                     if(area_play[i].size() == 0){
                         difference[i] = 5;
                     }
@@ -165,7 +166,7 @@ class FreeCell: public PlayingCards{
                 cout<<'\n';
 
                 for (size_t i = 0; i < PLAY_AREA_SIZE; i++){
-                    //sprawd˜ czy istnieje karta na indeksie,je˜li nie to pomi˜
+                    //sprawdÅº czy istnieje karta na indeksie,jeÅ›li nie to pomiÅ„
                     
                     if(difference[i] == 4){
                         cout<<"|_________|"<<'\t';
@@ -187,6 +188,25 @@ class FreeCell: public PlayingCards{
                 play_index++;
                 cout<<'\n';
             }
+
+            for(int j=0; j<5; j++){
+                for(int i=0; i<8; i++){
+                    if(difference[i] == 4){
+                        cout<<"|_________|"<<'\t';
+                        difference[i]++;
+                        continue;
+                    }
+                    else if(difference[i] == 5){
+                        cout<<std::setw(10)<<'\t';
+                    }
+                    else{
+                         cout<<"|         |"<<'\t';
+                         difference[i]++;
+                    }
+                }
+                cout<<'\n';
+            }
+        }
 
             for(int j=0; j<5; j++){
                 for(int i=0; i<8; i++){
