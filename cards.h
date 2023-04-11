@@ -253,13 +253,13 @@ class FreeCell: public PlayingCards{
             
             return true;
             }
+    public:
         bool checkWin(){
             //Je˜li zosta˜y tylko 4 karty w grze (ka˜da na polu zwyci˜skim), to wygrywasz
             if(cards_in_game == 4){
                 return true;
             }else return false;
         }
-    public:
         void checkInput(string input){
             
             if(input == "help"){
