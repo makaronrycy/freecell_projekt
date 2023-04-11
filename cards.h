@@ -207,27 +207,6 @@ class FreeCell: public PlayingCards{
                 cout<<'\n';
             }
         }
-
-            for(int j=0; j<5; j++){
-                for(int i=0; i<8; i++){
-                    if(difference[i] == 4){
-                        cout<<"|_________|"<<'\t';
-                        difference[i]++;
-                        continue;
-                    }
-                    else if(difference[i] == 5){
-                        cout<<std::setw(10)<<'\t';
-                    }
-                    else{
-                         cout<<"|         |"<<'\t';
-                         difference[i]++;
-                    }
-                }
-                cout<<'\n';
-            }
-            
-
-        }
         bool moveCard(char src,int from,char dest,char to = 0){
             // sprawdzanie czy wywo˜anie ruchu jest poprawne
             int destination[2] = {from,to};
