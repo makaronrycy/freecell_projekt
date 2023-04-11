@@ -1,6 +1,5 @@
 #include "header.h"
 #include "cards.h"
-using namespace std; // to dla mnie 
 
 int main(){
     setlocale(LC_ALL,"Polish");
