@@ -293,7 +293,7 @@ class FreeCell: public PlayingCards{
                 return;
             }
             if(!regex_match(input,std::regex("((g+[1-8])+((g+[1-8])|p|d))|(p+[1-4])+((g+[1-8])|d)"))){
-                cout<<"Niepoprawna sk˜adnia komendy\n";
+                cout<<"Niepoprawna sk³adnia komendy\n";
                 return;
             }
 
