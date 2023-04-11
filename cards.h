@@ -3,7 +3,6 @@
 */
 
 #include "header.h"
-using namespace std; // sory ale tak mi latwiej
 /*
 KODOWANIE KART:
 s - serce   1 - As  
