@@ -8,6 +8,7 @@
 #include <random>
 #include <iomanip>
 #include <regex>
+#include <locale.h>
 //najczęściej używane obiekty z std
 using std::vector;
 using std::cout;
