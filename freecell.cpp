@@ -8,8 +8,8 @@ int main(){
     FreeCell cards;
     cards.newGame();
     string input;
-    wcout << "Oznaczenia pól:" << '\n' << "grupa 'pole gry' = g" << '\n' << "grupa 'pomocnicza' = p" << '\n' << "grupa 'docelowa' = d" << '\n';
-    wcout <<"Wpisz help jeœli potrzebujesz pomocy\n";
+    cout << "Oznaczenia pól:" << '\n' << "grupa 'pole gry' = g" << '\n' << "grupa 'pomocnicza' = p" << '\n' << "grupa 'docelowa' = d" << '\n';
+    cout <<"Wpisz help jeœli potrzebujesz pomocy\n";
     while (!cards.checkWin())
     {
         cout<<"\n>>";
