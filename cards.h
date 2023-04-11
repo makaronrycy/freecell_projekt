@@ -26,9 +26,9 @@ const char *spades  = "\x06";  //♠
 
 struct Card{
     public: 
-        const int number;
+        int number;
         const char *type;
-        const bool if_red;
+        bool if_red;
         Card(int number = 0, const char *type = DEFAULT_CHAR){
             this->number = number;
             this->type = type;
