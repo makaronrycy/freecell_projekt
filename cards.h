@@ -13,10 +13,11 @@ p - pik     12 - dama
             13 - król
 */
 
+const char help_text[] = "Zasady gry:\n\n1) Plansza składa sie z 3 grup pól:\n   a) grupa \"docelowa\" - sklada sie z czterech pól, trzeba na nich posortowac od najmniejszego(asa) do najwiekszego(krola) karty tego samego znaczka (cztery pola cztery znaczki), z tej grupy nie wolno zdejmowac kart\n   b) grupa \"pomocnicza\" - sklada sie z czterech pól, mozna na kazdym z czterech pol polozyc dowolna karte, nie mozna stackowac kart na sobie, mozna zdejmowac karty w dowolnym momencie\n   c) grupa \"pole gry\" - sklada sie z osmiu pól, na poczatku gry losowane sa karty, na pierwszych czterech polach lezy 7 rozlosowanych kart na pozostalych 6 rozlosowanych kart, z kazdego pola mozna zdejmowac karte znajdujaca sie na wierzchu, natomiast położyć kartę na polu można tylko wtedy, gdy karta na którą kładziemy, jest przeciwnego koloru (czarny/czerwony) i o jednostkę wyższa od karty kładzionej – na przykład na króla kier można położyć tylko damę pik lub damę trefl. Na puste pole można położyć dowolną kartę.\n\n2) Dozwolone ruchy:\n- Przeniesienie karty z pola gry na inne pole gry;\n- Przeniesienie karty z pola gry do grupy pól pomocniczych\n- Przeniesienie karty z grupy pól pomocniczych na pole gry\n- Przeniesienie karty z pola gry do grupy pól docelowych\n- Przeniesienie karty z grupy pól pomocniczych do grupy pól docelowych.\n\n3) Porażka:\nCzasami zdarza się, że nie jest możliwe wykonanie ruchu zgodnego z zasadami gry. Freecella uznaje się wtedy za przegranego.\nNie każde rozdanie FreeCella jest możliwe do ułożenia.";
 
- const int DECK_SIZE = 52;
- const int PLAY_AREA_SIZE = 8;
- const int GENERAL_AREA_SIZE = 4;
+const int DECK_SIZE = 52;
+const int PLAY_AREA_SIZE = 8;
+const int GENERAL_AREA_SIZE = 4;
 const char* DEFAULT_CHAR = nullptr;
 
 const char *hearts  = "\x03";  //♥
@@ -67,20 +68,31 @@ class FreeCell: public PlayingCards{
         int i_free;
         int cards_in_game;
     public:
-        bool if_win;
         void newGame(){
-                if_win = false;
+                thread t1(FreeCell::shuffleCards,this);
+                for (int i = 0; i < PLAY_AREA_SIZE; i++)
+                {
+                    area_play[i].clear();
+                }
+                for (int i = 0; i < GENERAL_AREA_SIZE; i++)
+                {
+                    area_free[i] = Card();
+                    area_win[i] = Card();
+                }
+                
                 i_free = 0;
                 cards_in_game = 52;
-                thread t1(FreeCell::shuffleCards,this);
+                
                 t1.join();
                 for(int i = 0; i < DECK_SIZE; i++){
                     int play_column = i % PLAY_AREA_SIZE;
                     auto play_end = area_play[play_column].end();
                     area_play[play_column].insert(play_end,deck[i]);
                 }
+                drawBoard();
         }
         void drawBoard(){
+            system("cls");
             int cards_accounted = 0;
             for(auto i: area_free){
                 if(i.number == 0) cout<<" _________ "<<'\t';
@@ -105,7 +117,6 @@ class FreeCell: public PlayingCards{
             int difference[8] = {};
             while (cards_accounted < cards_in_game){
                 // cout<<std::setw(12);
-                
                 for(int i=0; i< PLAY_AREA_SIZE; i++){
                     if(area_play[i].size() == 0){
                         difference[i] = 5;
@@ -173,11 +184,11 @@ class FreeCell: public PlayingCards{
 
 
         }
-        bool moveCard(int from, int to, char area[]){
+        bool moveCard(char src,int from,char dest,char to = 0){
             // sprawdzanie czy wywołanie ruchu jest poprawne
             int destination[2] = {from,to};
             Card selected_cards[2];
-            if(isdigit(area[0]) || isdigit(area[1]) || isalpha(from) || isalpha(to)) return false;
+            char area[2] = {src,dest};
             if(area_play[from].empty()) return false;
             
             //Przygotowanie kart oraz sprawdzanie zakresów w jakich mogą sie ruszać
@@ -186,15 +197,12 @@ class FreeCell: public PlayingCards{
                 switch (area[i])
                 {
                 case 'g':
-                    if(destination[i] < 0 || destination[i] > 7) return false;
                     selected_cards[i] = area_play[destination[i]].back(); 
                     break;
                 case 'p':
-                    if(destination[i] < 0 || destination[i] > 3) return false;
                     selected_cards[i] = area_free[destination[i]];
                     break;
                 case 'd':
-                    if(i == 0) return false;
                     selected_cards[i] = area_win[destination[i]];
                     break;
                 default:
@@ -206,24 +214,24 @@ class FreeCell: public PlayingCards{
 
             //ZASADY DLA RUCHÓW
 
-            if(area[0] == 'g' && area[1] == 'g'){
+            if(src == 'g' && dest == 'g'){
                 if(cardValue_to.number - cardValue_from.number != 1) return false;     // sprawdzanie czy ruch jest legalny
                 if(cardValue_from.if_red == cardValue_to.if_red) return false;
                 area_play[to].push_back(area_play[from].back());
             }
 
-            if(area[0] == 'g' && area[1] == 'p' && i_free < GENERAL_AREA_SIZE){
+            if(src == 'g' && dest == 'p' && i_free < GENERAL_AREA_SIZE){
                 area_free[i_free] = cardValue_from;
                 i_free++;
             }
-            if(area[0] == 'p' && area[1] == 'g' && i_free > 0){
+            if(src == 'p' && dest == 'g' && i_free > 0){
                 if(cardValue_to.number - cardValue_from.number != 1 || cardValue_from.if_red == cardValue_to.if_red){
                     return false;
                 }
                 area_play[to].push_back(cardValue_from);
             }
             //Grupa Docelowa
-            if(area[1] == 'd'){
+            if(dest == 'd'){
                 for (int i = 0; i < GENERAL_AREA_SIZE; i++){
                     if(area_win[i].type == cardValue_from.type || area_win[i].type == DEFAULT_CHAR){
                         if(cardValue_from.number - area_win[i].number != 1){
@@ -236,11 +244,12 @@ class FreeCell: public PlayingCards{
                 }
             }
             //Usuwanie przesuniętych kart
-            if(area[0] == 'g') area_play[from].pop_back();
-            else if(area[0] == 'p'){
+            if(src == 'g') area_play[from].pop_back();
+            else if(src == 'p'){
                 area_free[from] = Card();
                 i_free--;
             }
+            
             return true;
             }
         bool checkWin(){
@@ -248,5 +257,31 @@ class FreeCell: public PlayingCards{
             if(cards_in_game == 4){
                 return true;
             }else return false;
+        }
+        void checkInput(string input){
+            
+            if(input == "help"){
+                drawBoard();
+                help();
+                return;
+            }
+            if(input == "new"){
+                newGame();
+                return;
+            }
+            if(!regex_match(input,regex("((g+[1-8])+((g+[1-8])|p|d))|(p+[1-4])+((g+[1-8])|d)"))){
+                cout<<"Niepoprawna składnia komendy\n";
+                return;
+            }
+
+            char src = input[0];
+            int from = int(input[1])-49;
+            char dest = input[2];
+            int to = ((input.size() == 3) ? 0 :int(input[3])-49);
+            moveCard(src,from,dest,to);
+            drawBoard();
+        }
+        void help(){
+            cout<<help_text;
         }
 };
