@@ -53,7 +53,7 @@ class PlayingCards{
         void shuffleCards(){
             std::random_device rd;
             std::mt19937 g(rd());
-            std::shuffle(deck.begin(),deck.end(),g);
+            std::shuffle(this->deck.begin(),this->deck.end(),g);
         }
 };
 
@@ -92,7 +92,7 @@ class FreeCell: public PlayingCards{
                 drawBoard();
         }
         void drawBoard(){
-            system("cls");
+            //system("cls");
             int cards_accounted = 0;
             for(auto i: area_free){
                 if(i.number == 0) cout<<" _________ "<<'\t';
@@ -278,7 +278,10 @@ class FreeCell: public PlayingCards{
             int from = int(input[1])-49;
             char dest = input[2];
             int to = ((input.size() == 3) ? 0 :int(input[3])-49);
-            moveCard(src,from,dest,to);
+            if(!moveCard(src,from,dest,to)){
+                cout<<"Ruch wbrew zasadom!\n";
+                return;
+            }
             drawBoard();
         }
         void help(){
