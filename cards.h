@@ -83,7 +83,7 @@ class FreeCell: public PlayingCards{
             for(int j=0; j<6; j++){
                 for(auto i: area_free){
                     if(i.number != 0 && j==0) {
-                        cout<<"|"<<i.type<<std::setw(8)<<i.number<<"|"<<'\t';
+                        cout<<"|"<<i.type<<std::setw(8)<<EvaluateNumber(i.number)<<"|"<<'\t';
                         cards_accounted++;
                     }
                     else if(j>=0 && j<=4){
@@ -98,7 +98,7 @@ class FreeCell: public PlayingCards{
                 cout<<std::setw(8)<<'\t';
                 for(auto i: area_win){
                     if(i.number != 0 && j==0) {
-                        cout<<"|"<<i.type<<std::setw(8)<<i.number<<"|"<<'\t';
+                        cout<<"|"<<i.type<<std::setw(8)<<EvaluateNumber(i.number)<<"|"<<'\t';
                         cards_accounted++;
                     }
                     else if(j>=0 && j<=4){
@@ -161,7 +161,7 @@ class FreeCell: public PlayingCards{
                         continue;
                     } 
                     cards_accounted++;
-                    cout<<"|"<<area_play[i][play_index].type<<std::setw(8)<<area_play[i][play_index].number<<"|"<<'\t';   
+                    cout<<"|"<<area_play[i][play_index].type<<std::setw(8)<<EvaluateNumber(area_play[i][play_index].number)<<"|"<<'\t';   
                 }
                 play_index++;
                 cout<<'\n';
@@ -253,6 +253,25 @@ class FreeCell: public PlayingCards{
             
             return true;
             }
+        string EvaluateNumber(int number){
+            switch(number){
+                case 1:
+                    return "A";
+                    break;
+                case 11:
+                    return "J";
+                    break;
+                case 12:
+                    return "Q";
+                    break;
+                case 13:
+                    return "K";
+                    break;
+                default:
+                    return std::to_string(number);
+                    break;
+            }
+        }
     public:
         bool checkWin(){
             //Je˜li zosta˜y tylko 4 karty w grze (ka˜da na polu zwyci˜skim), to wygrywasz
@@ -287,7 +306,7 @@ class FreeCell: public PlayingCards{
             drawBoard();
         }
         void newGame(){
-                thread t1(FreeCell::shuffleCards,this);
+                //thread t1(FreeCell::shuffleCards,this);
                 for (int i = 0; i < PLAY_AREA_SIZE; i++)
                 {
                     area_play[i].clear();
@@ -301,7 +320,7 @@ class FreeCell: public PlayingCards{
                 i_free = 0;
                 cards_in_game = 52;
                 
-                t1.join();
+                //t1.join();
                 for(int i = 0; i < DECK_SIZE; i++){
                     int play_column = i % PLAY_AREA_SIZE;
                     auto play_end = area_play[play_column].end();
