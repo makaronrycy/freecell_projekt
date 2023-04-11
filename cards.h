@@ -78,22 +78,51 @@ class FreeCell: public PlayingCards{
         }
         void drawBoard(){
             int cards_accounted = 0;
-            for(auto i: area_free){
-                if(i.number == 0) cout<<" _________ "<<'\t';
-                else {
-                    cout<<i.type<<i.number<<'\t';
-                    cards_accounted++;
+            cout <<'\n' << std::setw(37) << "Grupa Pomocnicza" << std::setw(72) << "Grupa Docelowa" << '\n';
+            for (int i=0; i<8; i++){
+                cout<<" _________ "<<'\t';
+                if (i == 3) cout<<std::setw(20); 
+            } 
+            cout << '\n';
+            
+            for(int j=0; j<6; j++){
+                for(auto i: area_free){
+                    if(i.number != 0 && j==0) {
+                        cout<<"|"<<i.type<<std::setw(8)<<i.number<<"|"<<'\t';
+                        cards_accounted++;
+                    }
+                    else if(j>=0 && j<=4){
+                        cout<<"|         |"<<'\t';
+                    }
+                    else if(j==5){
+                        cout<<"|_________|"<<'\t';
+                    }
+                    else 
+                        cout<<std::setw(10)<<'\t';
                 }
-            }
-            cout<<std::setw(20);
-            for(auto i: area_win){
-                if(i.number == 0) cout<<" _________ "<<'\t';
-                else {
-                    cout<<i.type<<i.number<<'\t';
-                    cards_accounted++;
+                cout<<std::setw(20);
+                for(auto i: area_win){
+                    if(i.number != 0 && j==0) {
+                        cout<<"|"<<i.type<<std::setw(8)<<i.number<<"|"<<'\t';
+                        cards_accounted++;
+                    }
+                    else if(j>=0 && j<=4){
+                        cout<<"|         |"<<'\t';
+                    }
+                    else if(j==5){
+                        cout<<"|_________|"<<'\t';
+                    }
+                    else 
+                        cout<<std::setw(10)<<'\t';
                 }
+                cout<<'\n';
             }
-            cout<<'\n'<<'\n';
+            cout<<'\n'<<'\n'<< std::setw(60) << "Pole Gry" << '\n';
+            
+
+
+
+
             int play_index = 0;
             //wykonuje tak długo tyle ile jest kart w grze
 
