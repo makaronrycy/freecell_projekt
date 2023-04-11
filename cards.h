@@ -308,7 +308,7 @@ class FreeCell: public PlayingCards{
             drawBoard();
         }
         void newGame(){
-                //thread t1(FreeCell::shuffleCards,this);
+                thread t1(FreeCell::shuffleCards,this);
                 for (int i = 0; i < PLAY_AREA_SIZE; i++)
                 {
                     area_play[i].clear();
@@ -322,7 +322,7 @@ class FreeCell: public PlayingCards{
                 i_free = 0;
                 cards_in_game = 52;
                 
-                //t1.join();
+                t1.join();
                 for(int i = 0; i < DECK_SIZE; i++){
                     int play_column = i % PLAY_AREA_SIZE;
                     auto play_end = area_play[play_column].end();
