@@ -66,29 +66,9 @@ class FreeCell: public PlayingCards{
         Card area_free[GENERAL_AREA_SIZE];
         int i_free;
         int cards_in_game;
-    public:
-        void newGame(){
-                thread t1(FreeCell::shuffleCards,this);
-                for (int i = 0; i < PLAY_AREA_SIZE; i++)
-                {
-                    area_play[i].clear();
-                }
-                for (int i = 0; i < GENERAL_AREA_SIZE; i++)
-                {
-                    area_free[i] = Card();
-                    area_win[i] = Card();
-                }
-                
-                i_free = 0;
-                cards_in_game = 52;
-                
-                t1.join();
-                for(int i = 0; i < DECK_SIZE; i++){
-                    int play_column = i % PLAY_AREA_SIZE;
-                    auto play_end = area_play[play_column].end();
-                    area_play[play_column].insert(play_end,deck[i]);
-                }
-                drawBoard();
+
+        void help(){
+            cout<<help_text;
         }
         void drawBoard(){
             system("cls");
@@ -135,8 +115,7 @@ class FreeCell: public PlayingCards{
             cout<<'\n'<<'\n'<< std::setw(60) << "Pole Gry" << '\n';
             int play_index = 0;
             //wykonuje tak długo tyle ile jest kart w grze
-
-
+  
             int difference[8] = {};
             while (cards_accounted < cards_in_game){
                 // cout<<std::setw(12);
@@ -280,6 +259,7 @@ class FreeCell: public PlayingCards{
                 return true;
             }else return false;
         }
+    public:
         void checkInput(string input){
             
             if(input == "help"){
@@ -306,7 +286,28 @@ class FreeCell: public PlayingCards{
             }
             drawBoard();
         }
-        void help(){
-            cout<<help_text;
+        void newGame(){
+                thread t1(FreeCell::shuffleCards,this);
+                for (int i = 0; i < PLAY_AREA_SIZE; i++)
+                {
+                    area_play[i].clear();
+                }
+                for (int i = 0; i < GENERAL_AREA_SIZE; i++)
+                {
+                    area_free[i] = Card();
+                    area_win[i] = Card();
+                }
+                
+                i_free = 0;
+                cards_in_game = 52;
+                
+                t1.join();
+                for(int i = 0; i < DECK_SIZE; i++){
+                    int play_column = i % PLAY_AREA_SIZE;
+                    auto play_end = area_play[play_column].end();
+                    area_play[play_column].insert(play_end,deck[i]);
+                }
+                drawBoard();
         }
+        
 };
