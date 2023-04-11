@@ -1,6 +1,5 @@
 #include "header.h"
 #include "cards.h"
-using namespace std; // to dla mnie 
 
 int main(){
     setlocale(LC_ALL,"Polish");
@@ -8,17 +7,17 @@ int main(){
     string input;
     while(true){
         cards.newGame();
-        cout << "Oznaczenia pól:" << '\n' << "grupa 'pole gry' = g" << '\n' << "grupa 'pomocnicza' = p" << '\n' << "grupa 'docelowa' = d" << '\n';
-        cout <<"Wpisz help jeœli potrzebujesz pomocy\n";
+        cout << "Oznaczenia pï¿½l:" << '\n' << "grupa 'pole gry' = g" << '\n' << "grupa 'pomocnicza' = p" << '\n' << "grupa 'docelowa' = d" << '\n';
+        cout <<"Wpisz help jeï¿½li potrzebujesz pomocy\n";
         while (!cards.checkWin())
             {
                 cout<<"\n>>";
                 cin>>input;
                 cards.checkInput(input);
             }
-        cout<<"Zwyciêstwo!\n";
+        cout<<"Zwyciï¿½stwo!\n";
         char choice;
-        cout<<"Wpisz 'y', ¿eby zagraæ ponownie, lub cokolwiek innego by wyjœæ z programu\n";
+        cout<<"Wpisz 'y', ï¿½eby zagraï¿½ ponownie, lub cokolwiek innego by wyjï¿½ï¿½ z programu\n";
         cin>>choice;
         if(choice != 'y'){
             break;

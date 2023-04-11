@@ -1,19 +1,10 @@
 /*
-    Plik zawieraj˜cy wszystkie klasy
+    Plik zawierajï¿½cy wszystkie klasy
 */
 
 #include "header.h"
-using namespace std; // sory ale tak mi latwiej
-/*
-KODOWANIE KART:
-s - serce   1 - As  
-t - trefl   1..10 - odpowiednio liczby
-k - karo    11 - jopek
-p - pik     12 - dama
-            13 - kr˜l
-*/
 
-const char help_text[] = "\nZasady gry:\n\n1) Plansza sk³ada sie z 3 grup pól:\n   a) grupa \"docelowa\" - sklada sie z czterech pól, trzeba na nich posortowac od najmniejszego(asa) do najwiekszego(krola) karty tego samego znaczka (cztery pola cztery znaczki), z tej grupy nie wolno zdejmowac kart\n   b) grupa \"pomocnicza\" - sklada sie z czterech pól, mozna na kazdym z czterech pol polozyc dowolna karte, nie mozna stackowac kart na sobie, mozna zdejmowac karty w dowolnym momencie\n   c) grupa \"pole gry\" - sklada sie z osmiu pól, na poczatku gry losowane sa karty, na pierwszych czterech polach lezy 7 rozlosowanych kart na pozostalych 6 rozlosowanych kart, z kazdego pola mozna zdejmowac karte znajdujaca sie na wierzchu, natomiast po³o¿yæ kartê na polu mo¿na tylko wtedy, gdy karta na któr¹ k³adziemy, jest przeciwnego koloru (czarny/czerwony) i o jednostkê wy¿sza od karty k³adzionej. na przyk³ad na króla kier mo¿na po³o¿yæ tylko damê pik lub damê trefl. Na puste pole mo¿na po³o¿yæ dowoln¹ kartê.\n\n2) Dozwolone ruchy:\n- Przeniesienie karty z pola gry na inne pole gry;\n- Przeniesienie karty z pola gry do grupy pól pomocniczych\n- Przeniesienie karty z grupy pól pomocniczych na pole gry\n- Przeniesienie karty z pola gry do grupy pól docelowych\n- Przeniesienie karty z grupy pól pomocniczych do grupy pól docelowych.\n\n3) Pora¿ka:\nCzasami zdarza sie, ¿e nie jest mo¿liwe wykonanie ruchu zgodnego z zasadami gry. Freecella uznaje siê wtedy za przegranego.\nNie ka¿de rozdanie FreeCella jest mo¿liwe do u³o¿enia.\n\nPrzyk³adowe komendy:\ng1g2 - przenosi z kolumny pierwszej grupy g³ównej na kolumne drug¹\ng1p - przenosi z kolumny pierwszej grupy g³ównej do grupy pomocniczej\np1g1 - przenosi z pierwszej kolumny pomocniczej na pierwsza kolumne grupy g³ównej\ng1d - przenosi z grupy g³ównej kolumny pierwszej na grupê docelow¹\n";
+const char help_text[] = "\nZasady gry:\n\n1) Plansza skï¿½ada sie z 3 grup pï¿½l:\n   a) grupa \"docelowa\" - sklada sie z czterech pï¿½l, trzeba na nich posortowac od najmniejszego(asa) do najwiekszego(krola) karty tego samego znaczka (cztery pola cztery znaczki), z tej grupy nie wolno zdejmowac kart\n   b) grupa \"pomocnicza\" - sklada sie z czterech pï¿½l, mozna na kazdym z czterech pol polozyc dowolna karte, nie mozna stackowac kart na sobie, mozna zdejmowac karty w dowolnym momencie\n   c) grupa \"pole gry\" - sklada sie z osmiu pï¿½l, na poczatku gry losowane sa karty, na pierwszych czterech polach lezy 7 rozlosowanych kart na pozostalych 6 rozlosowanych kart, z kazdego pola mozna zdejmowac karte znajdujaca sie na wierzchu, natomiast poï¿½oï¿½yï¿½ kartï¿½ na polu moï¿½na tylko wtedy, gdy karta na ktï¿½rï¿½ kï¿½adziemy, jest przeciwnego koloru (czarny/czerwony) i o jednostkï¿½ wyï¿½sza od karty kï¿½adzionej. na przykï¿½ad na krï¿½la kier moï¿½na poï¿½oï¿½yï¿½ tylko damï¿½ pik lub damï¿½ trefl. Na puste pole moï¿½na poï¿½oï¿½yï¿½ dowolnï¿½ kartï¿½.\n\n2) Dozwolone ruchy:\n- Przeniesienie karty z pola gry na inne pole gry;\n- Przeniesienie karty z pola gry do grupy pï¿½l pomocniczych\n- Przeniesienie karty z grupy pï¿½l pomocniczych na pole gry\n- Przeniesienie karty z pola gry do grupy pï¿½l docelowych\n- Przeniesienie karty z grupy pï¿½l pomocniczych do grupy pï¿½l docelowych.\n\n3) Poraï¿½ka:\nCzasami zdarza sie, ï¿½e nie jest moï¿½liwe wykonanie ruchu zgodnego z zasadami gry. Freecella uznaje siï¿½ wtedy za przegranego.\nNie kaï¿½de rozdanie FreeCella jest moï¿½liwe do uï¿½oï¿½enia.\n\nPrzykï¿½adowe komendy:\ng1g2 - przenosi z kolumny pierwszej grupy gï¿½ï¿½wnej na kolumne drugï¿½\ng1p - przenosi z kolumny pierwszej grupy gï¿½ï¿½wnej do grupy pomocniczej\np1g1 - przenosi z pierwszej kolumny pomocniczej na pierwsza kolumne grupy gï¿½ï¿½wnej\ng1d - przenosi z grupy gï¿½ï¿½wnej kolumny pierwszej na grupï¿½ docelowï¿½\n";
 
 const int DECK_SIZE = 52;
 const int PLAY_AREA_SIZE = 8;
@@ -140,8 +131,6 @@ class FreeCell: public PlayingCards{
 
             int difference[8] = {};
             while (cards_accounted < cards_in_game){
-                // cout<<std::setw(12);
-                
                 for(int i=0; i<8; i++){
                     if(area_play[i].size() == 0){
                         difference[i] = 5;
@@ -208,13 +197,13 @@ class FreeCell: public PlayingCards{
             }
         }
         bool moveCard(char src,int from,char dest,char to = 0){
-            // sprawdzanie czy wywo˜anie ruchu jest poprawne
+            // sprawdzanie czy wywoï¿½anie ruchu jest poprawne
             int destination[2] = {from,to};
             Card selected_cards[2];
             char area[2] = {src,dest};
             if(area_play[from].empty()) return false;
             
-            //Przygotowanie kart oraz sprawdzanie zakres˜w w jakich mog˜ sie rusza˜
+            //Przygotowanie kart oraz sprawdzanie zakresï¿½w w jakich mogï¿½ sie ruszaï¿½
             for (int i = 0; i < 2; i++)
             {
                 switch (area[i])
@@ -235,7 +224,7 @@ class FreeCell: public PlayingCards{
             Card cardValue_from = selected_cards[0];
             Card cardValue_to = selected_cards[1];
 
-            //ZASADY DLA RUCH˜W
+            //ZASADY DLA RUCHï¿½W
 
             if(src == 'g' && dest == 'g'){
                 if(cardValue_to.number - cardValue_from.number != 1) return false;     // sprawdzanie czy ruch jest legalny
@@ -266,7 +255,7 @@ class FreeCell: public PlayingCards{
                     }
                 }
             }
-            //Usuwanie przesuni˜tych kart
+            //Usuwanie przesuniï¿½tych kart
             if(src == 'g') area_play[from].pop_back();
             else if(src == 'p'){
                 area_free[from] = Card();
@@ -276,7 +265,7 @@ class FreeCell: public PlayingCards{
             return true;
             }
         bool checkWin(){
-            //Je˜li zosta˜y tylko 4 karty w grze (ka˜da na polu zwyci˜skim), to wygrywasz
+            //Jeï¿½li zostaï¿½y tylko 4 karty w grze (kaï¿½da na polu zwyciï¿½skim), to wygrywasz
             if(cards_in_game == 4){
                 return true;
             }else return false;
@@ -292,8 +281,8 @@ class FreeCell: public PlayingCards{
                 newGame();
                 return;
             }
-            if(!regex_match(input,regex("((g+[1-8])+((g+[1-8])|p|d))|(p+[1-4])+((g+[1-8])|d)"))){
-                cout<<"Niepoprawna sk˜adnia komendy\n";
+            if(!regex_match(input,std::regex("((g+[1-8])+((g+[1-8])|p|d))|(p+[1-4])+((g+[1-8])|d)"))){
+                cout<<"Niepoprawna skï¿½adnia komendy\n";
                 return;
             }
 
@@ -308,6 +297,6 @@ class FreeCell: public PlayingCards{
             drawBoard();
         }
         void help(){
-            wcout<<help_text;
+            std::wcout<<help_text;
         }
 };
