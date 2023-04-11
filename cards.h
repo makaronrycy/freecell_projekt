@@ -81,7 +81,7 @@ class FreeCell: public PlayingCards{
             cout <<'\n' << std::setw(37) << "Grupa Pomocnicza" << std::setw(72) << "Grupa Docelowa" << '\n';
             for (int i=0; i<8; i++){
                 cout<<" _________ "<<'\t';
-                if (i == 3) cout<<std::setw(20); 
+                if (i == 3) cout<<std::setw(8)<<'\t'; 
             } 
             cout << '\n';
             
@@ -100,7 +100,7 @@ class FreeCell: public PlayingCards{
                     else 
                         cout<<std::setw(10)<<'\t';
                 }
-                cout<<std::setw(20);
+                cout<<std::setw(8)<<'\t';
                 for(auto i: area_win){
                     if(i.number != 0 && j==0) {
                         cout<<"|"<<i.type<<std::setw(8)<<i.number<<"|"<<'\t';
@@ -118,11 +118,6 @@ class FreeCell: public PlayingCards{
                 cout<<'\n';
             }
             cout<<'\n'<<'\n'<< std::setw(60) << "Pole Gry" << '\n';
-            
-
-
-
-
             int play_index = 0;
             //wykonuje tak długo tyle ile jest kart w grze
 
@@ -195,8 +190,6 @@ class FreeCell: public PlayingCards{
                 }
                 cout<<'\n';
             }
-
-
         }
         bool moveCard(int from, int to, char area[]){
             // sprawdzanie czy wywołanie ruchu jest poprawne
