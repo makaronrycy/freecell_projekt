@@ -187,11 +187,12 @@ class FreeCell: public PlayingCards{
         }
         bool moveCard(char src,int from,char dest,char to = 0){
             // sprawdzanie czy wywo˜anie ruchu jest poprawne
+            
             int destination[2] = {from,to};
             Card selected_cards[2];
             char area[2] = {src,dest};
             if(area_play[from].empty()) return false;
-            
+            if(dest == 'p' && i_free >= GENERAL_AREA_SIZE) return false;
             //Przygotowanie kart oraz sprawdzanie zakres˜w w jakich mog˜ sie rusza˜
             for (int i = 0; i < 2; i++)
             {
@@ -221,7 +222,8 @@ class FreeCell: public PlayingCards{
                 area_play[to].push_back(area_play[from].back());
             }
 
-            if(src == 'g' && dest == 'p' && i_free < GENERAL_AREA_SIZE){
+            if(src == 'g' && dest == 'p'){
+                
                 area_free[i_free] = cardValue_from;
                 i_free++;
             }
