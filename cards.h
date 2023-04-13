@@ -64,7 +64,7 @@ class FreeCell: public PlayingCards{
         vector<Card> area_play[PLAY_AREA_SIZE];
         Card area_win[GENERAL_AREA_SIZE];
         Card area_free[GENERAL_AREA_SIZE];
-        int i_free;
+
         int cards_in_game;
 
         void help(){
@@ -192,7 +192,6 @@ class FreeCell: public PlayingCards{
             Card selected_cards[2];
             char area[2] = {src,dest};
             if(area_play[from].empty()) return false;
-            if(dest == 'p' && i_free >= GENERAL_AREA_SIZE) return false;
             //Przygotowanie kart oraz sprawdzanie zakres˜w w jakich mog˜ sie rusza˜
             for (int i = 0; i < 2; i++)
             {
@@ -211,6 +210,8 @@ class FreeCell: public PlayingCards{
                     return false;
                 }
             }
+            if(selected_cards[0].type == DEFAULT_CHAR) return false;
+            
             Card cardValue_from = selected_cards[0];
             Card cardValue_to = selected_cards[1];
 
@@ -223,11 +224,20 @@ class FreeCell: public PlayingCards{
             }
 
             if(src == 'g' && dest == 'p'){
-                
-                area_free[i_free] = cardValue_from;
-                i_free++;
+                bool check =false;
+                for (int i = 0; i < GENERAL_AREA_SIZE; i++)
+                {
+                    if(area_free[i].type == DEFAULT_CHAR){
+                        area_free[i] = cardValue_from;
+                        check = true;
+                        break;
+                    } 
+                }
+                if(!check){
+                    return false;
+                }
             }
-            if(src == 'p' && dest == 'g' && i_free > 0){
+            if(src == 'p' && dest == 'g'){
                 if(cardValue_to.number - cardValue_from.number != 1 || cardValue_from.if_red == cardValue_to.if_red){
                     return false;
                 }
@@ -248,11 +258,7 @@ class FreeCell: public PlayingCards{
             }
             //Usuwanie przesuni˜tych kart
             if(src == 'g') area_play[from].pop_back();
-            else if(src == 'p'){
-                area_free[from] = Card();
-                i_free--;
-            }
-            
+            else if(src == 'p') area_free[from] = Card();
             return true;
             }
         string EvaluateNumber(int number){
@@ -318,8 +324,6 @@ class FreeCell: public PlayingCards{
                     area_free[i] = Card();
                     area_win[i] = Card();
                 }
-                
-                i_free = 0;
                 cards_in_game = 52;
                 
                 t1.join();
