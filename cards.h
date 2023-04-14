@@ -223,7 +223,7 @@ class FreeCell: public PlayingCards{
 
             if(src == 'g' && dest == 'p'){
                 bool choice = false;
-                for(int i =0;i<2;i++){
+                for(int i =0;i< GENERAL_SIZE_AREA;i++){
                     if(area_free[i].type == DEFAULT_CHAR){
                         choice = true;
                         area_free[i] = cardValue_from;
